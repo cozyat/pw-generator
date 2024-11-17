@@ -19,13 +19,9 @@ public class passwordGenerator {
     private static String websiteDomain;
     private static String line;
     public static void main(String[] args) throws IOException, NullPointerException, IllegalArgumentException {
-        System.out.print("Welcome to the password generator system! Please start by entering a website domain: \n");
         originalDomain = input.readLine().replaceAll("(?s)\\s+", " ").trim();
         websiteDomain = originalDomain.replaceAll("[^a-zA-Z0-9]", "");
         String randomizedDomain = randomizeDomain(websiteDomain);
-        
-        System.out.println("This is your randomized website phrase to be inserted into the password: " + randomizedDomain);
-        System.out.println("Next, enter phrases to make a password! (type 'exit' to finish): \n");
         while (!(line = input.readLine()).equalsIgnoreCase("exit") && line != null) {
             String[] phrase = line.trim().toLowerCase().split(" ");
             for (int i = 0; i < phrase.length; i++) {
@@ -34,7 +30,6 @@ public class passwordGenerator {
                 }
             }
             if (sb.length() > 10 && !check) {
-                System.out.print("The password will be too long. Would you like to continue? (yes/no): ");
                 String response = input.readLine().trim().toLowerCase();
                 if (response.equals("yes")) {
                     check = true;
@@ -42,7 +37,6 @@ public class passwordGenerator {
                 } else if (response.equals("no") || response == null) {
                     sb.setLength(11);
                     sb.append(randomizedDomain.substring(0, Math.min(5, randomizedDomain.length())));
-                    System.out.println("Truncated input: " + sb.toString() + "\nExiting... ");
                     break;
                 }
             } else if (sb.toString().split("\n").length > 3) {
@@ -56,7 +50,7 @@ public class passwordGenerator {
 
         String basePassword = sb.toString();
         if (basePassword.isEmpty() || basePassword == null) {
-            throw new IllegalArgumentException("No password was generated. Please enter at least one phrase and a valid website domain. ");
+            throw new IllegalArgumentException();
         }
 
         int rand = (int) (Math.random() * basePassword.length());
@@ -71,17 +65,14 @@ public class passwordGenerator {
         StringBuilder modifiedPassword = new StringBuilder(shuffle(basePassword));
         modifiedPassword.setCharAt(rand, modifiedChar);
         basePassword = modifiedPassword.toString();
-
+        
         int insertPosition = (int) (Math.random() * basePassword.length());
         StringBuilder complexPassword = new StringBuilder(basePassword);
         complexPassword.insert(insertPosition, randomizedDomain);
-
-        System.out.print("Now, enter your favorite character: ");
+        
         char favCharacter = (char) input.read();
-
+        
         complexPassword.insert(rand, favCharacter);
-
-        System.out.println("Here is your newly generated secure password for " + originalDomain + ": " + complexPassword.toString() + "\n");
         input.close();
     }
 
@@ -115,4 +106,3 @@ public class passwordGenerator {
         return randomized.toString();
     }
 }
-
