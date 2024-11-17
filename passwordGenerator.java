@@ -18,17 +18,21 @@ public class passwordGenerator {
     private static String originalDomain;
     private static String websiteDomain;
     private static String line;
+    
     public static void main(String[] args) throws IOException, NullPointerException, IllegalArgumentException {
         originalDomain = input.readLine().replaceAll("(?s)\\s+", " ").trim();
         websiteDomain = originalDomain.replaceAll("[^a-zA-Z0-9]", "");
         String randomizedDomain = randomizeDomain(websiteDomain);
+        
         while (!(line = input.readLine()).equalsIgnoreCase("exit") && line != null) {
             String[] phrase = line.trim().toLowerCase().split(" ");
+            
             for (int i = 0; i < phrase.length; i++) {
                 for (int j = 0; j < phrase[i].length(); j++) {
                     sb.append(phrase[i].charAt(j));
                 }
             }
+            
             if (sb.length() > 10 && !check) {
                 String response = input.readLine().trim().toLowerCase();
                 if (response.equals("yes")) {
@@ -39,6 +43,7 @@ public class passwordGenerator {
                     sb.append(randomizedDomain.substring(0, Math.min(5, randomizedDomain.length())));
                     break;
                 }
+                
             } else if (sb.toString().split("\n").length > 3) {
                 String[] lines = sb.toString().split("\n");
                 sb.setLength(0);
@@ -83,7 +88,6 @@ public class passwordGenerator {
         }
 
         StringBuilder output = new StringBuilder(basePassword.length());
-
         while (characters.size() != 0) {
             int randPicker = (int) (Math.random() * characters.size());
             output.append(characters.remove(randPicker));
@@ -99,6 +103,7 @@ public class passwordGenerator {
         }
 
         StringBuilder randomized = new StringBuilder();
+        
         while (characters.size() != 0) {
             int randIndex = (int) (Math.random() * characters.size());
             randomized.append(characters.remove(randIndex));
